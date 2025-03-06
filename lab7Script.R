@@ -1,0 +1,90 @@
+library(tidyverse)
+
+calculate_distribution <- function(alpha, beta)
+{
+  q1.fig.dat <- tibble(x = seq(-0.25, 1.25, length.out=1000)) |>   # generate a grid of points
+    mutate(beta.pdf = dbeta(x, alpha, beta),
+           norm.pdf = dnorm(x, mean = alpha/(alpha+beta), 
+           sd = sqrt((alpha*beta)/((alpha+beta)^2*(alpha+beta+1)))))  # Gaussian distribution with same mean and variance
+    plot = ggplot(data= q1.fig.dat)+                                              # specify data
+      geom_line(aes(x=x, y=beta.pdf, color="Beta(2,5)")) +                 # plot beta dist
+      geom_line(aes(x=x, y=norm.pdf, color="Gaussian(0.2857, 0.0255)")) +  # plot guassian dist
+      geom_hline(yintercept=0)+                                            # plot x axis
+      theme_bw()+                                                          # change theme
+      xlab("x")+                                                           # label x axis
+      ylab("Density")+                                                     # label y axis
+      scale_color_manual("", values = c("orange", "grey"))+                 # change colors
+      theme(legend.position = "bottom")   
+
+  values = tibble(mean = numeric(1), variance = numeric(1), 
+                  skewness = numeric(1), kurtosis = numeric(1)) |>
+    mutate(mean = alpha/(alpha + beta)) |>
+    mutate(variance = (alpha*beta)/((alpha+beta)^2*(alpha+beta+1))) |>
+    mutate(skewness = 2*(beta-alpha)*(alpha+beta+1)^(1/2)/((alpha+beta+2)*(alpha*beta)^(1/2))) |>
+    mutate(kurtosis = 6*((alpha-beta)^2*(alpha+beta+1)-alpha*beta*(alpha+beta+2))
+           /(alpha*beta*(alpha+beta+2)*(alpha+beta+3)))
+    return (list(plot = plot, values = values))
+}
+alpha.vals = c(2,5,5,.5)
+beta.vals = c(5,5,2,.5)
+total.data = tibble(mean = numeric(0), variance = numeric(0),
+                    skewness = numeric(0), kurtosis = numeric(0))
+all.plots = list()
+for(i in 1:4)
+{
+  return.val = calculate_distribution(alpha.vals[i], beta.vals[i])
+  total.data = bind_rows(total.data, return.val$values)
+  all.plots[[i]] <- return.val$plot
+}
+view(total.data)
+print(all.plots[[1]])
+print(all.plots[[2]])
+print(all.plots[[3]])
+print(all.plots[[4]])
+
+#Step 2:
+beta.moment <- function(alpha,beta,k, centered)
+{
+  mean.funct = function(x) x^1*dbeta(x,alpha, beta)
+  mean.val = integrate(mean.funct,lower = 0,upper = 1)$value
+  print(mean.val)
+  if(k == 1)
+  {
+    mean.val
+  }
+  else if(k == 2)
+  {
+    variance.funct = function(x) (x-mean.val)^k*dbeta(x,alpha,beta)
+    variance.val = integrate(variance.funct, 0,1)
+    variance.val
+  }
+  else if(k == 3)
+  {
+    skewness.funct.top = function(x) (x-mean.val)^k*dbeta(x,alpha,beta)
+    skewness.val.top = integrate(skewness.funct.top, 0,1)$value
+    skewness.funct.bott = function(x) (x-mean.val)^(k-1)*dbeta(x,alpha,beta)
+    skewness.val.bott = integrate(skewness.funct.bott, 0,1)$value
+    skewness.val = skewness.val.top/(skewness.val.bott^(3/2))
+    skewness.val
+  }
+  else if(k == 4)
+  {
+    kurt.funct.top = function(x) (x-mean.val)^k*dbeta(x,alpha,beta)
+    kurt.val.top = integrate(kurt.funct.top, 0, 1)$value
+    kurt.funct.bott = function(x) (x-mean.val)^(k-2) *dbeta(x,alpha,beta)
+    kurt.val.bott = integrate(kurt.funct.bott, 0, 1)$value
+    kurt.val = kurt.val.top/((kurt.val.bott)^2) -3
+    kurt.val
+  }
+    
+}
+
+#Making histograms
+
+set.seed(7272)
+
+
+
+
+
+
