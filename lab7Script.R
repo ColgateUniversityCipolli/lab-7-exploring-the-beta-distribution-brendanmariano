@@ -1,5 +1,5 @@
 library(tidyverse)
-
+library(cumstats)
 calculate_distribution <- function(alpha, beta)
 {
   q1.fig.dat <- tibble(x = seq(-0.25, 1.25, length.out=1000)) |>   # generate a grid of points
@@ -48,6 +48,7 @@ beta.moment <- function(alpha,beta,k, centered)
   mean.funct = function(x) x^1*dbeta(x,alpha, beta)
   mean.val = integrate(mean.funct,lower = 0,upper = 1)$value
   print(mean.val)
+  #Creating histogram
   if(k == 1)
   {
     mean.val
@@ -56,7 +57,7 @@ beta.moment <- function(alpha,beta,k, centered)
   {
     variance.funct = function(x) (x-mean.val)^k*dbeta(x,alpha,beta)
     variance.val = integrate(variance.funct, 0,1)
-    variance.val
+    variance.val$value
   }
   else if(k == 3)
   {
@@ -78,10 +79,39 @@ beta.moment <- function(alpha,beta,k, centered)
   }
     
 }
+population.data = tibble(alpha = numeric(), beta = numeric(), pop.mean = numeric(), variance = numeric(), 
+                         skewness = numeric(), excess.kurtosis = numeric())
+for(i in 1:4)
+{
+  row = tibble() |>
+  summarize(alpha = alpha.vals[i], beta = beta.vals[i],
+            pop.mean = beta.moment(alpha.vals[i], beta.vals[i],1,F),
+            variance = beta.moment(alpha.vals[i], beta.vals[i], 2, T),
+            skewness = beta.moment(alpha.vals[i], beta.vals[i], 3,T),
+            excess.kurtosis = beta.moment(alpha.vals[i], beta.vals[i], 4, T))
+  population.data = bind_rows(population.data, row)
+}
+view(population.data)
+#Creates histograms
 
-#Making histograms
-
+#Making data summary table
 set.seed(7272)
+sample.size = 500
+#Iterating through all of the distributions
+total.distrib = tibble(alpha = numeric(), beta = numeric(), sample.mean = numeric(), variance = numeric(), 
+                       skewness = numeric(), excess.kurtosis = numeric())
+#Calculates values for all of the different sample distributions
+for(i in 1:4)
+{
+  beta.sample = tibble(x = rbeta(n = sample.size, shape1 = alpha.vals[i], shape2 = beta.vals[i])) %>%
+    summarize(sample.mean = mean(x), variance = var(x), 
+              skewness = skewness(x), excess.kurtosis = kurtosis(x)) |>
+    mutate(alpha = alpha.vals[i], beta = beta.vals[i]) 
+    total.distrib = bind_rows(total.distrib, beta.sample)
+}
+view(total.distrib)
+
+#Step 4:
 
 
 
