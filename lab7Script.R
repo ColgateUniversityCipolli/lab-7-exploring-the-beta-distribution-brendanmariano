@@ -42,7 +42,7 @@ print(all.plots[[3]])
 print(all.plots[[4]])
 
 #Step 2:
-beta.moment <- function(alpha,beta,k, centered)
+beta.moment <- function(alpha, beta, k, centered)
 {
   mean.funct = function(x) x^1*dbeta(x,alpha, beta)
   mean.val = integrate(mean.funct,lower = 0,upper = 1)$value
@@ -88,6 +88,7 @@ for(i in 1:4)
             excess.kurtosis = beta.moment(alpha.vals[i], beta.vals[i], 4, T))
   population.data = bind_rows(population.data, row)
 }
+view(population.data)
 #Creates histograms
 
 #################################################################################
@@ -128,9 +129,15 @@ plot.list[[3]]
 plot.list[[4]]
 
 ################################################################################
-
+#Task Four
 ################################################################################
 
+cum.summ.mean = tibble(dat = cummean(pull(population.fig, beta.pdf))) |>
+  mutate(x = pull(population.fig, x))
+
+mean.plot = ggplot(data = cum.summ.mean) +
+  geom_line(aes(x = x, y = dat), color = "green") 
+mean.plot
 
 
 
