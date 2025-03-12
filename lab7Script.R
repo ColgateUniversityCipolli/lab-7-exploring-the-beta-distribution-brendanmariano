@@ -36,7 +36,6 @@ for(i in 1:4)
   total.data = bind_rows(total.data, return.val$values)
   all.plots[[i]] <- return.val$plot
 }
-view(total.data)
 print(all.plots[[1]])
 print(all.plots[[2]])
 print(all.plots[[3]])
@@ -48,7 +47,6 @@ beta.moment <- function(alpha,beta,k, centered)
   mean.funct = function(x) x^1*dbeta(x,alpha, beta)
   mean.val = integrate(mean.funct,lower = 0,upper = 1)$value
   print(mean.val)
-  #Creating histogram
   if(k == 1)
   {
     mean.val
@@ -79,41 +77,59 @@ beta.moment <- function(alpha,beta,k, centered)
   }
     
 }
-population.data = tibble(alpha = numeric(), beta = numeric(), pop.mean = numeric(), variance = numeric(), 
-                         skewness = numeric(), excess.kurtosis = numeric())
+population.data = tibble()
 for(i in 1:4)
 {
   row = tibble() |>
-  summarize(alpha = alpha.vals[i], beta = beta.vals[i],
-            pop.mean = beta.moment(alpha.vals[i], beta.vals[i],1,F),
+  summarize(type = "Population", alpha = alpha.vals[i], beta = beta.vals[i],
+            mean = beta.moment(alpha.vals[i], beta.vals[i],1,F),
             variance = beta.moment(alpha.vals[i], beta.vals[i], 2, T),
             skewness = beta.moment(alpha.vals[i], beta.vals[i], 3,T),
             excess.kurtosis = beta.moment(alpha.vals[i], beta.vals[i], 4, T))
   population.data = bind_rows(population.data, row)
 }
-view(population.data)
 #Creates histograms
 
-#Making data summary table
+#################################################################################
+#Making Data Summaries
+#################################################################################
 set.seed(7272)
 sample.size = 500
-#Iterating through all of the distributions
-total.distrib = tibble(alpha = numeric(), beta = numeric(), sample.mean = numeric(), variance = numeric(), 
-                       skewness = numeric(), excess.kurtosis = numeric())
-#Calculates values for all of the different sample distributions
+plot.list = list()
+summaries.list = list()
+i = 1
+#Should call calculate distribution
 for(i in 1:4)
 {
-  beta.sample = tibble(x = rbeta(n = sample.size, shape1 = alpha.vals[i], shape2 = beta.vals[i])) %>%
-    summarize(sample.mean = mean(x), variance = var(x), 
-              skewness = skewness(x), excess.kurtosis = kurtosis(x)) |>
-    mutate(alpha = alpha.vals[i], beta = beta.vals[i]) 
-    total.distrib = bind_rows(total.distrib, beta.sample)
+  total.distrib = tibble(type = character(), alpha = numeric(), beta = numeric(), mean = numeric(), variance = numeric(), 
+                       skewness = numeric(), excess.kurtosis = numeric())
+  beta.sample = tibble(x = rbeta(n = sample.size, shape1 = alpha.vals[i], shape2 = beta.vals[i])) 
+  #Stores actual probability density function
+  population.fig = tibble(x = seq(0, 1, length.out = 1000)) |>
+    mutate(beta.pdf = dbeta(x, shape1 = alpha.vals[i], shape2 = beta.vals[i]))
+  #Creates plots
+  plot.list[[i]] = ggplot() + 
+    geom_histogram(data = beta.sample, aes(x = x, y = after_stat(density)), fill = "royalblue") +
+    geom_density(data = beta.sample, aes(x = x, y = after_stat(density), color = "Sample")) + 
+    geom_line(data = population.fig, aes(x = x, y = beta.pdf, color = "Population")) 
+  #Making data summary table
+  summary = beta.sample %>%
+    summarize(type = "Sample", mean = mean(x), variance = var(x),
+              skewness = skewness(x), excess.kurtosis = kurtosis(x),
+              alpha = alpha.vals[i], beta = beta.vals[i]) 
+    total.distrib = bind_rows(total.distrib, summary)
+    total.distrib = bind_rows(total.distrib, population.data |> slice(i))
+    summaries.list[[i]] = total.distrib
 }
-view(total.distrib)
 
-#Step 4:
+plot.list[[1]]
+plot.list[[2]]
+plot.list[[3]]
+plot.list[[4]]
 
+################################################################################
 
+################################################################################
 
 
 
