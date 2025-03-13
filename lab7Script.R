@@ -222,7 +222,7 @@ for(i in 1:1000)
   #Stores current sample
   cs.curr.sample = tibble() |>
     summarize(sample.mean = mean(pull(random.data,x)), sample.var = var(pull(random.data,x)),
-           sample.skew = skewness(pull(random.data,x)), sample.kurt = kurtosis(pull(random.data,x)))
+           sample.skew = skewness(pull(random.data,x)), sample.kurt = kurtosis(pull(random.data,x))-3)
   cs.total.sample = cs.total.sample |>
     bind_rows(cs.curr.sample)
 }
