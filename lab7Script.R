@@ -1,5 +1,6 @@
 library(tidyverse)
 library(cumstats)
+library(patchwork)
 calculate_distribution <- function(alpha, beta)
 {
   q1.fig.dat <- tibble(x = seq(-0.25, 1.25, length.out=1000)) |>   # generate a grid of points
@@ -14,7 +15,8 @@ calculate_distribution <- function(alpha, beta)
       xlab("x")+                                                           # label x axis
       ylab("Density")+                                                     # label y axis
       scale_color_manual("", values = c("orange", "grey"))+                 # change colors
-      theme(legend.position = "bottom")   
+      theme(legend.position = "bottom") +
+      ggtitle(plot.titles[i]) 
 
   values = tibble(mean = numeric(1), variance = numeric(1), 
                   skewness = numeric(1), kurtosis = numeric(1)) |>
@@ -27,6 +29,8 @@ calculate_distribution <- function(alpha, beta)
 }
 alpha.vals = c(2,5,5,.5)
 beta.vals = c(5,5,2,.5)
+plot.titles = c("PDF of Beta(2,5)", "PDF of Beta(5,5)", 
+                "PDF of Beta(5,2)", "PDF of Beta(.5,.5)")
 total.data = tibble(mean = numeric(0), variance = numeric(0),
                     skewness = numeric(0), kurtosis = numeric(0))
 all.plots = list()
@@ -36,17 +40,15 @@ for(i in 1:4)
   total.data = bind_rows(total.data, return.val$values)
   all.plots[[i]] <- return.val$plot
 }
-print(all.plots[[1]])
-print(all.plots[[2]])
-print(all.plots[[3]])
-print(all.plots[[4]])
+view(total.data)
+(all.plots[[1]] + all.plots[[2]]) / 
+(all.plots[[3]] + all.plots[[4]])
 
 #Step 2:
 beta.moment <- function(alpha, beta, k, centered)
 {
   mean.funct = function(x) x^1*dbeta(x,alpha, beta)
   mean.val = integrate(mean.funct,lower = 0,upper = 1)$value
-  print(mean.val)
   if(k == 1)
   {
     mean.val
@@ -88,6 +90,8 @@ for(i in 1:4)
             excess.kurtosis = beta.moment(alpha.vals[i], beta.vals[i], 4, T))
   population.data = bind_rows(population.data, row)
 }
+print(beta.moment(2,5,3, F))
+print(calculate_distribution(2,5)$values)
 view(population.data)
 #Creates histograms
 
@@ -96,9 +100,10 @@ view(population.data)
 #################################################################################
 set.seed(7272)
 sample.size = 500
-plot.list = list()
-summaries.list = list()
-i = 1
+plot.list = list() #For storing the plots
+summaries.list = list() #For storing summaries
+plot.titles = c("Sample of Beta(2,5)", "Sample of Beta(5,5)", 
+                "Sample of Beta(5,2)", "Sample of Beta(.5,.5)")
 #Should call calculate distribution
 for(i in 1:4)
 {
@@ -112,7 +117,15 @@ for(i in 1:4)
   plot.list[[i]] = ggplot() + 
     geom_histogram(data = beta.sample, aes(x = x, y = after_stat(density)), fill = "royalblue") +
     geom_density(data = beta.sample, aes(x = x, y = after_stat(density), color = "Sample")) + 
-    geom_line(data = population.fig, aes(x = x, y = beta.pdf, color = "Population")) 
+    geom_line(data = population.fig, aes(x = x, y = beta.pdf, color = "Population")) + 
+    ylab("Density") +
+    xlab("x") + 
+    ggtitle(plot.titles[i]) + 
+    theme(plot.title = element_text(size = 10), 
+          legend.title = element_text(size = 10),
+          legend.text = element_text(size = 8)) +
+    labs(color = "Color")
+    
   #Making data summary table
   summary = beta.sample %>%
     summarize(type = "Sample", mean = mean(x), variance = var(x),
@@ -123,21 +136,124 @@ for(i in 1:4)
     summaries.list[[i]] = total.distrib
 }
 
-plot.list[[1]]
-plot.list[[2]]
-plot.list[[3]]
-plot.list[[4]]
+(plot.list[[1]] + plot.list[[2]]) /
+(plot.list[[3]] + plot.list[[4]])
 
 ################################################################################
 #Task Four
 ################################################################################
+###################
+#Adds cum mean
+###################
+mean.plot = ggplot() +
+  ylab("Cumulative Mean") + 
+  xlab("Observations") + 
+  geom_hline(yintercept = beta.moment(2,5, 1, F))
+###################
+#Adds cum variance
+###################
+var.plot = ggplot() +
+  ylab("Cumulative Variance") +
+  xlab("Observations") + 
+  geom_hline(yintercept = beta.moment(2,5,2,T))
+###################
+#Adds cum skewness
+###################
+skew.plot = ggplot() +
+  ylab("Cumulative Skewness") +
+  xlab("Observations") + 
+  geom_hline(yintercept = beta.moment(2,5,3,T))
+###################
+#Adds cum kurtosis
+###################
+kurt.plot = ggplot() +
+  ylab("Cumulative Kurtosis") +
+  xlab("Observations") + 
+  geom_hline(yintercept = beta.moment(2,5,4,T))
 
-cum.summ.mean = tibble(dat = cummean(pull(population.fig, beta.pdf))) |>
-  mutate(x = pull(population.fig, x))
 
-mean.plot = ggplot(data = cum.summ.mean) +
-  geom_line(aes(x = x, y = dat), color = "green") 
-mean.plot
+#Adds lines to each graph
+for(i in 2:50)
+{
+observations = 1:500
+  set.seed(7272 + i)
+  #Hardcoded alpha and beta values (can change if needed)
+  random.data = tibble(x = rbeta(n = 500, shape1 = 2, shape2 = 5)) |>   
+    mutate(cummean.1 = cummean(x))
+  mean.plot = mean.plot +
+    geom_line(data = random.data, aes(x=observations, y = cummean.1), color = i)
+  print(random.data)
+  #Variance
+  random.data = tibble(x = rbeta(n = 500, shape1 = 2, shape2 = 5)) |>   
+    mutate(cumvar.1 = cumvar(x))
+  var.plot = var.plot +
+    geom_line(data = random.data, aes(x=observations, y = cumvar.1), color = i)
+  print(random.data)
+  #Skewness
+  random.data = tibble(x = rbeta(n = 500, shape1 = 2, shape2 = 5)) |>   
+    mutate(cumskew.1 = cumskew(x))
+  skew.plot = skew.plot +
+    geom_line(data = random.data, aes(x=observations, y = cumskew.1), color = i)
+  #Kurtosis
+  random.data = tibble(x = rbeta(n = 500, shape1 = 2, shape2 = 5)) |>   
+    mutate(cumkurt.1 = cumkurt(x))
+  kurt.plot = kurt.plot +
+    geom_line(data = random.data, aes(x=observations, y = cumkurt.1-3), color = i)
+  
+}
+#Utilize Patchwork for displaying plots
+(mean.plot + skew.plot)/(var.plot + kurt.plot)
+################################################################################
+#Step 5:Modeling the variation
+################################################################################
+cs.total.sample = tibble(sample.mean = numeric(), sample.var = numeric(), 
+                                sample.skew = numeric(), sample.kurt = numeric())
+for(i in 1:1000)
+{
+  #Generates random sample
+  random.data = tibble(x = rbeta(n= 500, shape1 = 2, shape2 = 5))
+  #Stores current sample
+  cs.curr.sample = tibble() |>
+    summarize(sample.mean = mean(pull(random.data,x)), sample.var = var(pull(random.data,x)),
+           sample.skew = skewness(pull(random.data,x)), sample.kurt = kurtosis(pull(random.data,x)))
+  cs.total.sample = cs.total.sample |>
+    bind_rows(cs.curr.sample)
+}
+######################
+#Creating plots
+######################
+#Mean plot
+mean.plot = ggplot(data = cs.total.sample, aes(x = sample.mean, y = after_stat(density))) +
+  geom_histogram(fill = "navy") +
+  geom_density(color = "gray") + 
+  theme_bw() + 
+  xlab("Mean") + 
+  ylab("Density") + 
+  ggtitle("PDF of Mean")
 
+#Variance plot
+variance.plot = ggplot(data = cs.total.sample, aes(x = sample.var, y = after_stat(density))) +
+  geom_histogram(fill = "navy") +
+  geom_density(color = "gray") + 
+  theme_bw() + 
+  xlab("Variance") + 
+  ylab("Density") + 
+  ggtitle("PDF of Variance")
+#Skewness plot
+skewness.plot = ggplot(data = cs.total.sample, aes(x = sample.skew, y = after_stat(density))) +
+  geom_histogram(fill = "navy") +
+  geom_density(color = "gray") + 
+  theme_bw() + 
+  xlab("Skewness") + 
+  ylab("Density") + 
+  ggtitle("PDF of Skewness")
+#Kurtosis plot
+kurt.plot = ggplot(data = cs.total.sample, aes(x = sample.kurt, y = after_stat(density))) +
+  geom_histogram(fill = "navy") +
+  geom_density(color = "gray") + 
+  theme_bw() + 
+  xlab("Kurtosis") + 
+  ylab("Density") + 
+  ggtitle("PDF of Kurtosis")
 
-
+(mean.plot + variance.plot) / (skewness.plot + kurt.plot)
