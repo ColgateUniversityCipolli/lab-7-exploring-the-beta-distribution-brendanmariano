@@ -148,29 +148,36 @@ for(i in 1:4)
 mean.plot = ggplot() +
   ylab("Cumulative Mean") + 
   xlab("Observations") + 
-  geom_hline(yintercept = beta.moment(2,5, 1, F))
+  geom_hline(yintercept = beta.moment(2,5, 1, F)) +
+  ggtitle("Cumulative Mean with 49 samples") + 
+  theme(plot.title = element_text(size = 10))
 ###################
 #Adds cum variance
 ###################
 var.plot = ggplot() +
   ylab("Cumulative Variance") +
   xlab("Observations") + 
-  geom_hline(yintercept = beta.moment(2,5,2,T))
+  geom_hline(yintercept = beta.moment(2,5,2,T)) + 
+  ggtitle("Cumulative Variance with 49 samples") + 
+  theme(plot.title = element_text(size = 10))
 ###################
 #Adds cum skewness
 ###################
 skew.plot = ggplot() +
   ylab("Cumulative Skewness") +
   xlab("Observations") + 
-  geom_hline(yintercept = beta.moment(2,5,3,T))
+  geom_hline(yintercept = beta.moment(2,5,3,T)) +
+  ggtitle("Cumulative Skewness with 49 samples") + 
+  theme(plot.title = element_text(size = 10))
 ###################
 #Adds cum kurtosis
 ###################
 kurt.plot = ggplot() +
   ylab("Cumulative Kurtosis") +
   xlab("Observations") + 
-  geom_hline(yintercept = beta.moment(2,5,4,T))
-
+  geom_hline(yintercept = beta.moment(2,5,4,T)) + 
+  ggtitle("Cumulative Kurtosis with 49 samples") + 
+  theme(plot.title = element_text(size = 10))
 
 #Adds lines to each graph
 for(i in 2:50)
