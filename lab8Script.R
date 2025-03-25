@@ -34,3 +34,20 @@ mom.beta = function(data, par)
 #################
 #Method of Likelihood
 #################
+llmle.beta = function(data, par, neg)
+{
+  alpha = par[1]
+  beta = par[2]
+  
+  ll <- sum(log(dbeta(x=data, shape1=alpha, shape2=beta)), na.rm = TRUE) #Why are we doing the sum?
+  
+  return(ifelse(neg, -ll, ll))
+}
+
+(mle.val <- optim(fn = llmle.beta,
+              par = c(1,1),
+              data = data$`2022`,
+              neg=T))
+(alpha = mle.val$par[1])
+(beta = mle.val$par[2])
+  
