@@ -38,14 +38,17 @@
 
 \begin{multicols}{2}
 \begin{abstract}
-This lab provides a template for understanding how 
+This lab provides a template for understanding how a beta distribution works and for how we can find the optimal parameters to model a data set. We made conclusions about the beta distribution through analyzing it with various parameters and we fit it to data about death rates in 2022 using point estimators.
 
-This document provides a basic template for the 2-page labs we will complete each week. Here, briefly summarize what you did and why it might be helpful. Provide all the top-line conclusions, but avoid providing \emph{all} the details. Results should be limited to ``we show X, Y, and Z."
 \end{abstract}
 
-\noindent \textbf{Keywords:} What topics does the lab cover concerning class? List 3-4 key terms here, separated by semicolons.
+\noindent \textbf{Keywords:} beta distribution; density functions; samples; point estimation
 
 \section{Introduction}
+WRITE INTRO
+A beta distribution is a tool which can be used to model 
+
+
 In this lab, we sought to determine whether the 
 Provide an overarching summary of what you're talking about. In this section, you introduce the idea to the reader, and your goal is to pull them in. What's the mystery you aim to solve?
 
@@ -53,11 +56,11 @@ You want to provide enough background to understand the context of the work. Spe
 
 Provide a roadmap of the structure of the paper. 
 
-\subsection{Intro Subsection}
-You might need/want to discuss the topics in subsections. Or, you may have multiple questions.
 
 \section{Density Functions and Parameters}
-  We began by producing the beta probability density function with four different parameters for alpha and beta: (2,5), (5,5), (5,2), and (.5,.5). Using the data and ggplot citep{ggplot2}, we produced individual graphs for each set of parameters which also had a normal distribution containing the same mean and variance. Additionally, we included a Gaussian distribution in the plot which has the same mean and variance as the Beta distribution. When alpha and beta were equal at (5,5), the beta distribution resembled a normal distribution. When we decreased alpha to two, however, the data became right skewed, and when we decreased beta to two, the distribution became left skewed. Lastly, when we decreased both the alpha and beta to less than one, the distribution was symmetrical but had a greater density on the tails. 
+  A beta function is a distribution that is used to model set of data. Distribution's are useful because they allow us to model data to the best of our ability, which can allow us to make conclusions. The beta distribution specifically can take several different shapes based on its parameters alpha and beta,  but the main shape is a parabolic looking curve that has a maximum. It can also be left skewed, right skewed or normal depending on what the alpha and beta are. 
+
+  In lab 07, we produced the beta probability density function with four different parameters for alpha and beta: (2,5), (5,5), (5,2), and (.5,.5). Using the data and ggplot citep{ggplot2}, we produced individual graphs for each set of parameters which also had a normal distribution containing the same mean and variance. Additionally, we included a Gaussian distribution in the plot which has the same mean and variance as the Beta distribution. When alpha and beta were equal at (5,5), the beta distribution resembled a normal distribution. When we decreased alpha to two, however, the data became right skewed, and when we decreased beta to two, the distribution became left skewed. Lastly, when we decreased both the alpha and beta to less than one, the distribution was symmetrical but had a greater density on the tails. 
   
   
    \begin{figure}[H]
@@ -68,30 +71,8 @@ You might need/want to discuss the topics in subsections. Or, you may have multi
      \end{center}
    \end{figure}
 
-
-
-We used data about the death rates worldwide in 2022. We cleaned the data using the tidyverse \citep{tidyverse} 
-and made it usable for a beta distribution (having every value between 0 and 1 inclusive). 
-Since our overall goal was to compare the MLE and MOM, we calculated the values for each estimation  
-method using R. We also created a graph using ggplot \citep{ggplot2} comparing the population distribution in a histogram to the MLE and 
-MOM which were different colored lines.
-After working with the data from the worldwide death rates, we created 1000 samples of data using set seed 
-so that we could calculate that alpha and beta values for each point estimation method. Using the 1,000 
-values for MLE alpha, MLE, beta, MOM alpha and MOM beta, we were able to create graphs that compared the MLE 
-to the MOM.
-death rates in from almost every part of the world in 2022. This 
-Describe the data you are working with, if applicable. Describe the specific process you will follow to answer the question at hand. This does not mean you should write something like this.
-\begin{quote}
-\textit{I did this and then I did that and then I did this other thing and then..., and then..., and then...}
-\end{quote}
-Instead, it should provide a clear and concise narrative that flows from the problem specification in the Introduction to how you will approach answering it. This is where I would expect to see some citations for \texttt{R} packages you will use to conduct the statistical analysis reported in the Results section.
-
-
-\subsection{Methods Subsection}
-Much like the Introduction, subsections can be helpful for the Methods section. For example, you might describe data collection and the statistical analyses of the collected data in different subsections. Or, you may have different questions that require distinct methods. 
-
 \section{Properties}
-There were four properties or moments, which we analyzed: mean, variance, skewness, and kurtosis. Moments are different indicators for a distribution. They can either be un-centered, indicating that they take they don't account for the mean, or centered which means that they account for the mean. The moments are advantageous because they allow us to calculate the values for a sample. The equations are as follows. 
+There were four properties or moments, which we analyzed: mean, variance, skewness, and kurtosis. Moment are calculated using a given distribution and its parameters. In this lab, we calculated each value based on the beta distribution. Moments can either be un-centered, indicating that they take they don't account for the mean, or centered which means that they account for the mean. The moments are advantageous because they allow us to calculate the values for a sample. The equations are as follows. 
 
 
 \[
@@ -110,29 +91,50 @@ There were four properties or moments, which we analyzed: mean, variance, skewne
 \mathrm{kurt}(X) = \frac{\mathbb{E} \left[ (X - \mu_X)^4 \right]}{\left( \mathbb{E} \left[ (X - \mu_X)^2 \right] \right)^2} - 3
 \]
 
+We then calculated the cumulative moment for each of the four moments for 500 observations, which we obtained randomly from the beta distribution-- we repeated this process 48 times. For instance, if we were calculating the cumulative mean, then we would calculate the mean at every observation from zero to 500. We found through our calculations that the cumulative mean of each tract converges to the population (the black y-intercept line) value by 500 observations. 
+This ultimately shows that the beta distribution can be modeled given a hundred or more observations that align with it. 
+
+\section{Estimators}
+  Although we analyzed the beta distribution in lab 07, we never established a method to find its parameter values for a given data set to apply it. In lab 08, we utilized two estimator methods in order to determine the alpha and beta values for the beta distribution given our data set. The first estimator method is MOM or Measure of Moments. A moment can be calculated based on the population and based on the parameters (alpha and beta). The number of moments that we choose to analyze is equal to the number of unknown variables. The goal of the Measure of Moments is to finds parameter value where the chosen moments are equal in both calculations. The second estimator is the Measure of Likelihood (MLE). MLE is based on the principle of likelihood and uses the probability density function. The probability density function displays the frequency that values occur with respect to other values in the data set or distribution (semantics vary between discrete and continuous data). Given a certain set of parameters, MLE creates a probability density function and uses the function to check the density (amount that values occur relative to others) for each value in the data set. The likelihood is then calculated by multiplying each density together. The parameters that produce the greatest likelihood model the distribution most effectively. One caveat is that we often use the log likelihood because the standard likelihood function becomes extremely close to zero. 
+
+WHICH ESTIMATOR TO USE
+AND SIGNIFIANCE OF THE TABLE (COMPARISON WITH MLE AND MOM OR ALSO FOR ALPHA AND BETA VALUES?)
+\subsection{Example}
+  In lab 08, we used the the point estimators with the beta distribution to model data about death rates in 2022. We plugged in 8 as alpha and 950 as beta for our initial values and then tracked the values that our MLE and MOM functions produced, which allowed us to graph them (figure 4) and make direct comparisons. Just visually you can see that both the MLE and MOM peak at just before 8 for alpha and around 940 for beta; however the MLE estimator method has sharper peaks for both the alpha and beta values, which suggests that MLE is more accurate. This finding is supported by the actual values in table 1. The bias is less than MOM's for both alpha and beta, it is more precise, and MLE has less of an mse. Since the MLE is better with every indicator, it is safe to conclude that it is more effective for representing a population. 
+  
+\[
+\text{bias} = \text{mean}(\text{distribution}) - \text{actual mean}
+\]
+
+\[
+\text{variance} = (\text{standard deviation})^2
+\]
+
+\[
+\text{precision} = \frac{1}{\text{variance}(\text{distribution})}
+\]
+
+\[
+\text{mean squared error (MSE)} = \text{variance}(\text{distribution}) + \text{bias}^2
+\]
+
+  
+  WHAT DOES THIS TELL US ABOUT WHICH TO USE?
+  When we created our plot comparing the actual death rates in 2022 to the MLE and MOM estimations, we found that they were all distributed very similarly. The MLE and MOM distributions were practically identical and the population histogram followed a very similar shape to the lines. 
 
 
 
-When we created our plot comparing the actual death rates in 2022 to the MLE and MOM estimations, we found that they were all distributed very similarly. The MLE and MOM distributions were practically identical and the population histogram followed a very similar shape to the lines. 
-
-For our four plots comparing the distribution of Alpha and Beta values for MLE and MOM over 1,000 samples, the MLE had a 
-more defined peak for both the Alpha and Beta values. The alpha value peaked at roughly 8 and the beta value 
-peaked at roughly 950. The distribution of MOM values also peaked at 8 for alpha and 950 for beta, however, the peak is 
-less sharp which suggests more variance within the data.  
-
-TALK ABOUT TABLE
-ADD TABLE AND GRAPHS
-Tie together the Introduction -- where you introduce the problem at hand -- and the methods --  what you propose to do to answer the question. Present your data, the results of your analyses, and how each reported aspect contributes to answering the question. This section should include table(s), statistic(s), and graphical displays. Make sure to put the results in a sensible order and that each result contributes a logical and developed solution. It should not just be a list. Avoid being repetitive. 
-
-\subsection{Results Subsection}
-Subsections can be helpful for the Results section, too. This can be particularly helpful if you have different questions to answer. 
-
-
-\section{Example}
-
- You should objectively evaluate the evidence you found in the data. Do not embellish or wish-terpet (my made-up phase for making an interpretation you, or the researcher, wants to be true without the data \emph{actually} supporting it). Connect your findings to the existing information you provided in the Introduction.
-
-Finally, provide some concluding remarks that tie together the entire paper. Think of the last part of the results as abstract-like. Tell the reader what they just consumed -- what's the takeaway message?
+We used data about the death rates worldwide in 2022. We cleaned the data using the tidyverse \citep{tidyverse} 
+and made it usable for a beta distribution (having every value between 0 and 1 inclusive). 
+Since our overall goal was to compare the MLE and MOM, we calculated the values for each estimation  
+method using R. We also created a graph using ggplot \citep{ggplot2} comparing the population distribution in a histogram to the MLE and 
+MOM which were different colored lines.
+After working with the data from the worldwide death rates, we created 1000 samples of data using set seed 
+so that we could calculate that alpha and beta values for each point estimation method. Using the 1,000 
+values for MLE alpha, MLE, beta, MOM alpha and MOM beta, we were able to create graphs that compared the MLE 
+to the MOM.
+death rates in from almost every part of the world in 2022. This 
+Describe the data you are working with, if applicable. Describe the specific process you will follow to answer the question at hand. This does not mean you should write something like this.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Bibliography
@@ -166,6 +168,7 @@ you cite them in your document, the bibliography section will automatically popu
    \hline
 \end{tabular}
 \end{table}
-If you have anything extra, you can add it here in the appendix. This can include images or tables that don't work well in the two-page setup, code snippets you might want to share, etc.
+
+
 
 \end{document}

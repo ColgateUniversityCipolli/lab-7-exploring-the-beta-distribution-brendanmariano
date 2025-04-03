@@ -48,18 +48,26 @@ mle.beta = mle.val$par[2]
 #################################
 #Histogram of data
 #MOM and MLE Distribution
+mom.a.val = round(mom.alpha, digits = 2)
+mom.b.val = round(mom.beta.val, digits = 2)
+mle.a.val = round(mle.alpha, digits = 2)
+mle.b.val = round(mle.beta, digits = 2)
+
+mom.legend = paste("MOM(", mom.a.val, ",", mom.b.val, ")", sep = "")
+mle.legend = paste("MLE(", mle.a.val, ",", mle.b.val, ")", sep = "")
 mom.seq = tibble(x = seq(0,.022,.0001)) |>
   mutate(mom.dat = dbeta(x, shape1 = mom.alpha, shape2 = mom.beta.val)) |>
   mutate(mle.dat = dbeta(x, shape1 = mle.alpha, shape2 = mle.beta))
 mom.plot = ggplot() +
   geom_histogram(aes(x = data1$`2022`, y = after_stat(density)), 
                  breaks = seq(0,.022, .0017), fill = "black") + 
-  geom_line(data = mom.seq, aes(x = x, y = mom.dat, color = "MOM")) +
-  geom_line(data = mom.seq, aes(x = x, y = mle.dat, color = "MLE")) +
+  geom_line(data = mom.seq, aes(x = x, y = mom.dat, color = mom.legend)) +
+  geom_line(data = mom.seq, aes(x = x, y = mle.dat, color = mle.legend)) +
   xlab("Proportion of Deaths relative to Entire Population") + 
   ylab("Density") +
   ggtitle("Population vs Estimation of Death Distribution") + 
-  theme_bw()
+  theme_bw() + 
+  labs(color = "Estimation Method")
 mom.plot
 
 #################################
