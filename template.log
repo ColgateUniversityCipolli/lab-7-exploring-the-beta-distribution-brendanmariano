@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025) (preloaded format=pdflatex 2025.3.31)  3 APR 2025 11:58
+This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025) (preloaded format=pdflatex 2025.3.31)  3 APR 2025 12:56
 entering extended mode
  \write18 enabled.
  %&-line parsing enabled.
@@ -457,48 +457,49 @@ LaTeX Font Info:    Trying to load font information for U+msb on input line 89.
 (/Users/brendanmariano/Library/TinyTeX/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
-<densityf.pdf, id=28, 465.74pt x 306.14375pt>
+<densityf.pdf, id=30, 465.74pt x 306.14375pt>
 File: densityf.pdf Graphic file (type pdf)
 <use densityf.pdf>
-Package pdftex.def Info: densityf.pdf  used on input line 117.
+Package pdftex.def Info: densityf.pdf  used on input line 110.
 (pdftex.def)             Requested size: 232.86943pt x 153.07149pt.
 [1
 
 {/Users/brendanmariano/Library/TinyTeX/texmf-var/fonts/map/pdftex/updmap/pdftex.map} <./densityf.pdf>] (./template.bbl)
 
 [2]
-<cumStats.pdf, id=67, 466.74374pt x 465.74pt>
-File: cumStats.pdf Graphic file (type pdf)
-<use cumStats.pdf>
-Package pdftex.def Info: cumStats.pdf  used on input line 219.
-(pdftex.def)             Requested size: 233.37129pt x 232.86943pt.
-<betaParam.pdf, id=68, 466.74374pt x 465.74pt>
+<betaParam.pdf, id=67, 466.74374pt x 465.74pt>
 File: betaParam.pdf Graphic file (type pdf)
 <use betaParam.pdf>
-Package pdftex.def Info: betaParam.pdf  used on input line 220.
+Package pdftex.def Info: betaParam.pdf  used on input line 206.
+(pdftex.def)             Requested size: 233.37129pt x 232.86943pt.
+<cumStats.pdf, id=68, 466.74374pt x 465.74pt>
+File: cumStats.pdf Graphic file (type pdf)
+<use cumStats.pdf>
+Package pdftex.def Info: cumStats.pdf  used on input line 207.
 (pdftex.def)             Requested size: 233.37129pt x 232.86943pt.
 <moments.pdf, id=69, 466.74374pt x 465.74pt>
 File: moments.pdf Graphic file (type pdf)
 <use moments.pdf>
-Package pdftex.def Info: moments.pdf  used on input line 227.
-(pdftex.def)             Requested size: 233.37129pt x 232.86943pt.
-<mle&mom.pdf, id=70, 466.74374pt x 465.74pt>
-File: mle&mom.pdf Graphic file (type pdf)
-<use mle&mom.pdf>
-Package pdftex.def Info: mle&mom.pdf  used on input line 235.
-(pdftex.def)             Requested size: 233.37129pt x 232.86943pt.
-<PopvEst.pdf, id=71, 466.74374pt x 465.74pt>
-File: PopvEst.pdf Graphic file (type pdf)
-<use PopvEst.pdf>
-Package pdftex.def Info: PopvEst.pdf  used on input line 236.
+Package pdftex.def Info: moments.pdf  used on input line 214.
 (pdftex.def)             Requested size: 233.37129pt x 232.86943pt.
 
 
 [3
 
- <./cumStats.pdf> <./betaParam.pdf> <./moments.pdf>]
+ <./betaParam.pdf> <./cumStats.pdf>]
+<mle&mom.pdf, id=87, 466.74374pt x 465.74pt>
+File: mle&mom.pdf Graphic file (type pdf)
+<use mle&mom.pdf>
+Package pdftex.def Info: mle&mom.pdf  used on input line 222.
+(pdftex.def)             Requested size: 233.37129pt x 232.86943pt.
+<PopvEst.pdf, id=88, 466.74374pt x 465.74pt>
+File: PopvEst.pdf Graphic file (type pdf)
+<use PopvEst.pdf>
+Package pdftex.def Info: PopvEst.pdf  used on input line 223.
+(pdftex.def)             Requested size: 233.37129pt x 232.86943pt.
 
-[4 <./mle&mom.pdf> <./PopvEst.pdf>] (./template.aux)
+
+[4 <./moments.pdf> <./mle&mom.pdf> <./PopvEst.pdf>] (./template.aux)
  ***********
 LaTeX2e <2024-11-01> patch level 2
 L3 programming layer <2025-01-18>
@@ -510,18 +511,18 @@ Package rerunfilecheck Info: File `template.out' has not changed.
 (rerunfilecheck)             Checksum: 53B87FFDB94758261716554719936BF6;676.
  ) 
 Here is how much of TeX's memory you used:
- 12288 strings out of 475171
- 196864 string characters out of 5764597
- 626817 words of memory out of 5000000
+ 12289 strings out of 475171
+ 196879 string characters out of 5764597
+ 621817 words of memory out of 5000000
  35118 multiletter control sequences out of 15000+600000
  567825 words of font info for 71 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 75i,8n,79p,1603b,602s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 75i,8n,79p,1603b,590s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </Users/brendanmariano/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></Users/brendanmariano/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></Users/brendanmariano/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx9.pfb></Users/brendanmariano/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></Users/brendanmariano/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></Users/brendanmariano/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></Users/brendanmariano/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></Users/brendanmariano/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></Users/brendanmariano/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb></Users/brendanmariano/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr5.pfb></Users/brendanmariano/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></Users/brendanmariano/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb></Users/brendanmariano/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></Users/brendanmariano/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmti7.pfb></Users/brendanmariano/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt12.pfb></Users/brendanmariano/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on template.pdf (4 pages, 758067 bytes).
+Output written on template.pdf (4 pages, 756135 bytes).
 PDF statistics:
- 183 PDF objects out of 1000 (max. 8388607)
- 131 compressed objects within 2 object streams
- 19 named destinations out of 1000 (max. 500000)
+ 184 PDF objects out of 1000 (max. 8388607)
+ 132 compressed objects within 2 object streams
+ 20 named destinations out of 1000 (max. 500000)
  79 words of extra memory for PDF output out of 10000 (max. 10000000)
 
