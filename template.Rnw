@@ -23,7 +23,7 @@
 \begin{document}
 
 \vspace{-1in}
-\title{Lab 08 -- MATH 240 -- Computational Statistics}
+\title{Lab 7-8 -- MATH 240 -- Computational Statistics}
 
 \author{
   Brendan Mariano \\
@@ -45,11 +45,9 @@ This lab provides a template for understanding how a beta distribution works and
 \noindent \textbf{Keywords:} beta distribution; density functions; samples; point estimation
 
 \section{Introduction}
-WRITE INTRO
-A beta distribution is a tool which can be used to model 
+A beta distribution is a tool which can be used to model data. The goal of labs 7 and 8 was to learn about how the beta distribution functions and to determine how we can fit it to a data set. In lab 07, we experimented with changing the parameters of a beta distribution and we analyzed the distribution of mean, variance, skewness, and kurtosis individually after resampling random values from a beta distribution. This is discussed in the Density Functions and Parameters section, and the Properties section. In order to fit the beta distribution to given data sets, we used point estimators which are discussed in the estimators section. 
 
 
-In this lab, we sought to determine whether the 
 Provide an overarching summary of what you're talking about. In this section, you introduce the idea to the reader, and your goal is to pull them in. What's the mystery you aim to solve?
 
 You want to provide enough background to understand the context of the work. Specifically, what is the question you are addressing? If it applies, describe what information currently exists about this problem, including citations, and explain how the question you're answering complements this work.
@@ -96,11 +94,11 @@ This ultimately shows that the beta distribution can be modeled given a hundred 
 
 \section{Estimators}
   Although we analyzed the beta distribution in lab 07, we never established a method to find its parameter values for a given data set to apply it. In lab 08, we utilized two estimator methods in order to determine the alpha and beta values for the beta distribution given our data set. The first estimator method is MOM or Measure of Moments. A moment can be calculated based on the population and based on the parameters (alpha and beta). The number of moments that we choose to analyze is equal to the number of unknown variables. The goal of the Measure of Moments is to finds parameter value where the chosen moments are equal in both calculations. The second estimator is the Measure of Likelihood (MLE). MLE is based on the principle of likelihood and uses the probability density function. The probability density function displays the frequency that values occur with respect to other values in the data set or distribution (semantics vary between discrete and continuous data). Given a certain set of parameters, MLE creates a probability density function and uses the function to check the density (amount that values occur relative to others) for each value in the data set. The likelihood is then calculated by multiplying each density together. The parameters that produce the greatest likelihood model the distribution most effectively. One caveat is that we often use the log likelihood because the standard likelihood function becomes extremely close to zero. 
-
+   
 WHICH ESTIMATOR TO USE
 AND SIGNIFIANCE OF THE TABLE (COMPARISON WITH MLE AND MOM OR ALSO FOR ALPHA AND BETA VALUES?)
 \subsection{Example}
-  In lab 08, we used the the point estimators with the beta distribution to model data about death rates in 2022. We plugged in 8 as alpha and 950 as beta for our initial values and then tracked the values that our MLE and MOM functions produced, which allowed us to graph them (figure 4) and make direct comparisons. Just visually you can see that both the MLE and MOM peak at just before 8 for alpha and around 940 for beta; however the MLE estimator method has sharper peaks for both the alpha and beta values, which suggests that MLE is more accurate. This finding is supported by the actual values in table 1. The bias is less than MOM's for both alpha and beta, it is more precise, and MLE has less of an mse. Since the MLE is better with every indicator, it is safe to conclude that it is more effective for representing a population. 
+  In lab 08, we used the the point estimators with the beta distribution to model data about death rates in 2022,, which we cleaned using \cite{tidyverse}. We plugged in 8 as alpha and 950 as beta for our initial values and then tracked the values that our MLE and MOM functions produced, which allowed us to graph them (figure 4) and make direct comparisons. Just visually you can see that both the MLE and MOM peak at just before 8 for alpha and around 940 for beta; however the MLE estimator method has sharper peaks for both the alpha and beta values, which suggests that MLE is more accurate. This finding is supported by the actual values in table 1. The bias is less than MOM's for both alpha and beta, it is more precise, and MLE has less of an mse. Since the MLE is better with every indicator, it is safe to conclude that it is more effective for representing a population. 
   
 \[
 \text{bias} = \text{mean}(\text{distribution}) - \text{actual mean}
@@ -123,8 +121,6 @@ AND SIGNIFIANCE OF THE TABLE (COMPARISON WITH MLE AND MOM OR ALSO FOR ALPHA AND 
   When we created our plot comparing the actual death rates in 2022 to the MLE and MOM estimations, we found that they were all distributed very similarly. The MLE and MOM distributions were practically identical and the population histogram followed a very similar shape to the lines. 
 
 
-
-We used data about the death rates worldwide in 2022. We cleaned the data using the tidyverse \citep{tidyverse} 
 and made it usable for a beta distribution (having every value between 0 and 1 inclusive). 
 Since our overall goal was to compare the MLE and MOM, we calculated the values for each estimation  
 method using R. We also created a graph using ggplot \citep{ggplot2} comparing the population distribution in a histogram to the MLE and 
@@ -133,16 +129,12 @@ After working with the data from the worldwide death rates, we created 1000 samp
 so that we could calculate that alpha and beta values for each point estimation method. Using the 1,000 
 values for MLE alpha, MLE, beta, MOM alpha and MOM beta, we were able to create graphs that compared the MLE 
 to the MOM.
-death rates in from almost every part of the world in 2022. This 
-Describe the data you are working with, if applicable. Describe the specific process you will follow to answer the question at hand. This does not mean you should write something like this.
+death rates in from almost every part of the world in 2022. 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Bibliography
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \vspace{2em}
-
-\noindent\textbf{Bibliography:} Note that when you add citations to your bib.bib file \emph{and}
-you cite them in your document, the bibliography section will automatically populate here.
 
 \begin{tiny}
 \bibliography{bib}
@@ -168,7 +160,28 @@ you cite them in your document, the bibliography section will automatically popu
    \hline
 \end{tabular}
 \end{table}
-
-
-
+\begin{figure}[H]
+    \begin{center}
+       \includegraphics[scale=0.5]{cumStats.pdf}
+       \includegraphics[scale=0.5]{betaParam.pdf}
+       \caption{}
+     \label{cumStat}
+     \end{center}
+   \end{figure}
+   \begin{figure}[H]
+    \begin{center}
+       \includegraphics[scale=0.5]{moments.pdf}
+       \caption{}
+     \label{densityf}
+     \end{center}
+   \end{figure}
+   
+   \begin{figure}[H]
+    \begin{center}
+       \includegraphics[scale=0.5]{mle&mom.pdf}
+       \includegraphics[scale=0.5]{PopvEst.pdf}
+       \caption{}
+     \label{densityf}
+     \end{center}
+   \end{figure}
 \end{document}
