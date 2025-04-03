@@ -3,12 +3,14 @@ library(cumstats)
 library(patchwork)
 calculate_distribution <- function(alpha, beta)
 {
+  label = paste("Beta(",alpha,",", beta,")", sep = "")
+  # print(label)
   q1.fig.dat <- tibble(x = seq(-0.25, 1.25, length.out=1000)) |>   # generate a grid of points
     mutate(beta.pdf = dbeta(x, alpha, beta),
            norm.pdf = dnorm(x, mean = alpha/(alpha+beta), 
            sd = sqrt((alpha*beta)/((alpha+beta)^2*(alpha+beta+1)))))  # Gaussian distribution with same mean and variance
     plot = ggplot(data= q1.fig.dat)+                                              # specify data
-      geom_line(aes(x=x, y=beta.pdf, color="Beta(2,5)")) +                 # plot beta dist
+      geom_line(aes(x=x, y=beta.pdf, color=label)) +                 # plot beta dist
       geom_line(aes(x=x, y=norm.pdf, color="Gaussian(0.2857, 0.0255)")) +  # plot guassian dist
       geom_hline(yintercept=0)+                                            # plot x axis
       theme_bw()+                                                          # change theme
@@ -40,7 +42,7 @@ for(i in 1:4)
   total.data = bind_rows(total.data, return.val$values)
   all.plots[[i]] <- return.val$plot
 }
-view(total.data)
+# view(total.data)
 (all.plots[[1]] + all.plots[[2]]) / 
 (all.plots[[3]] + all.plots[[4]])
 
@@ -90,9 +92,9 @@ for(i in 1:4)
             excess.kurtosis = beta.moment(alpha.vals[i], beta.vals[i], 4, T))
   population.data = bind_rows(population.data, row)
 }
-print(beta.moment(2,5,3, F))
-print(calculate_distribution(2,5)$values)
-view(population.data)
+# print(beta.moment(2,5,3, F))
+# print(calculate_distribution(2,5)$values)
+# view(population.data)
 #Creates histograms
 
 #################################################################################
@@ -115,7 +117,8 @@ for(i in 1:4)
     mutate(beta.pdf = dbeta(x, shape1 = alpha.vals[i], shape2 = beta.vals[i]))
   #Creates plots
   plot.list[[i]] = ggplot() + 
-    geom_histogram(data = beta.sample, aes(x = x, y = after_stat(density)), fill = "royalblue") +
+    geom_histogram(data = beta.sample, aes(x = x, y = after_stat(density)), fill = "royalblue", 
+                   breaks = seq(0,1,.08)) +
     geom_density(data = beta.sample, aes(x = x, y = after_stat(density), color = "Sample")) + 
     geom_line(data = population.fig, aes(x = x, y = beta.pdf, color = "Population")) + 
     ylab("Density") +
@@ -189,13 +192,13 @@ observations = 1:500
     mutate(cummean.1 = cummean(x))
   mean.plot = mean.plot +
     geom_line(data = random.data, aes(x=observations, y = cummean.1), color = i)
-  print(random.data)
+  # print(random.data)
   #Variance
   random.data = tibble(x = rbeta(n = 500, shape1 = 2, shape2 = 5)) |>   
     mutate(cumvar.1 = cumvar(x))
   var.plot = var.plot +
     geom_line(data = random.data, aes(x=observations, y = cumvar.1), color = i)
-  print(random.data)
+  # print(random.data)
   #Skewness
   random.data = tibble(x = rbeta(n = 500, shape1 = 2, shape2 = 5)) |>   
     mutate(cumskew.1 = cumskew(x))
@@ -231,7 +234,7 @@ for(i in 1:1000)
 ######################
 #Mean plot
 mean.plot = ggplot(data = cs.total.sample, aes(x = sample.mean, y = after_stat(density))) +
-  geom_histogram(fill = "navy") +
+  geom_histogram(fill = "navy", breaks = seq(.26,.31,.003)) +
   geom_density(color = "gray") + 
   theme_bw() + 
   xlab("Mean") + 
@@ -240,7 +243,7 @@ mean.plot = ggplot(data = cs.total.sample, aes(x = sample.mean, y = after_stat(d
 
 #Variance plot
 variance.plot = ggplot(data = cs.total.sample, aes(x = sample.var, y = after_stat(density))) +
-  geom_histogram(fill = "navy") +
+  geom_histogram(fill = "navy",breaks = seq(.02,.03,.0008)) +
   geom_density(color = "gray") + 
   theme_bw() + 
   xlab("Variance") + 
@@ -248,7 +251,7 @@ variance.plot = ggplot(data = cs.total.sample, aes(x = sample.var, y = after_sta
   ggtitle("PDF of Variance")
 #Skewness plot
 skewness.plot = ggplot(data = cs.total.sample, aes(x = sample.skew, y = after_stat(density))) +
-  geom_histogram(fill = "navy") +
+  geom_histogram(fill = "navy", breaks = seq(.3,.9,.04)) +
   geom_density(color = "gray") + 
   theme_bw() + 
   xlab("Skewness") + 
@@ -256,7 +259,7 @@ skewness.plot = ggplot(data = cs.total.sample, aes(x = sample.skew, y = after_st
   ggtitle("PDF of Skewness")
 #Kurtosis plot
 kurt.plot = ggplot(data = cs.total.sample, aes(x = sample.kurt, y = after_stat(density))) +
-  geom_histogram(fill = "navy") +
+  geom_histogram(fill = "navy", breaks = seq(-.6,.6,.095)) +
   geom_density(color = "gray") + 
   theme_bw() + 
   xlab("Kurtosis") + 

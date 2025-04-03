@@ -26,7 +26,6 @@ mom.beta = function(data, par)
                              data = data1$`2022`))
 (mom.alpha = measure.of.moments$x[1])
 (mom.beta.val = measure.of.moments$x[2])
-
 #####################
 #Method of Likelihood
 #####################
@@ -49,13 +48,12 @@ mle.beta = mle.val$par[2]
 #################################
 #Histogram of data
 #MOM and MLE Distribution
-mom.seq = tibble(x = seq(0,.025,.0001)) |>
+mom.seq = tibble(x = seq(0,.022,.0001)) |>
   mutate(mom.dat = dbeta(x, shape1 = mom.alpha, shape2 = mom.beta.val)) |>
   mutate(mle.dat = dbeta(x, shape1 = mle.alpha, shape2 = mle.beta))
-view(mom.seq)
 mom.plot = ggplot() +
   geom_histogram(aes(x = data1$`2022`, y = after_stat(density)), 
-                 breaks = seq(0,.022, .0022), fill = "black") + 
+                 breaks = seq(0,.022, .0017), fill = "black") + 
   geom_line(data = mom.seq, aes(x = x, y = mom.dat, color = "MOM")) +
   geom_line(data = mom.seq, aes(x = x, y = mle.dat, color = "MLE")) +
   xlab("Proportion of Deaths relative to Entire Population") + 
@@ -95,7 +93,6 @@ for(i in 1:1000)
                                 x = c(1,1),
                                 data = dat)$x[2])
 }
-view(mom.beta.list)
 ##################
 #Creating Plots
 #################
@@ -115,7 +112,7 @@ mle.beta.plot = ggplot() +
   theme_bw()
 #Plots mom alpha
 mom.alpha.plot = ggplot() +
-  geom_density(aes(x = mle.alpha.list),fill = "blue") + 
+  geom_density(aes(x = mom.alpha.list),fill = "blue") + 
   xlab("Alpha (MOM)") + 
   ylab("Density") +
   ggtitle("MOM Alpha Distribution") +
@@ -125,7 +122,7 @@ mom.beta.plot = ggplot() +
   geom_density(aes(x = mom.beta.list), fill = "green") + 
   xlab("Beta (MLE)") + 
   ylab("Density") +
-  ggtitle("MLE Beta Distribution") +
+  ggtitle("MOM Beta Distribution") +
   theme_bw()
 (mle.alpha.plot + mle.beta.plot) /
 (mom.alpha.plot + mom.beta.plot)
